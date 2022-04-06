@@ -7,7 +7,6 @@ import com.shaizambrovski.repository.TenantRepository;
 import com.shaizambrovski.util.JWTUtil;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,47 +63,3 @@ public class MapLambdaAuthorizer implements RequestHandler<Map<String, Object>, 
         return response;
     }
 }
-
-/*public class MapLambdaAuthorizer implements RequestHandler<Map<String, Object>, Map<String, Object>> {
-
-    private String lambdaArn = "arn:aws:lambda:us-east-1:325366286308:function:TestCognitoLambda";
-    private TenantRepository tenantRepository = new TenantRepository();
-
-    @Override
-    public Map<String, Object> handleRequest(Map<String, Object> event, Context lambdaContext) {
-
-        String authorizationToken = (String) event.get("Authorization");
-        String resource = (String) event.get("methodArn");
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("principalId", "1234");
-
-        Map<String, Object> policyDocument = new HashMap<>();
-        policyDocument.put("Version", "2012-10-17");
-
-        Map<String, String> statement = new HashMap<>();
-        statement.put("Action", "execute-api:Invoke");
-
-        String clientId = JWTUtil.getClaimValue(authorizationToken, "client_id");
-
-        statement.put("Effect", "Allow");
-
-        String tenantIdAsString = (tenantRepository.getTenantIdByClientId(clientId) != null) ?
-                tenantRepository.getTenantIdByClientId(clientId).toString() : null;
-        if (tenantIdAsString == null) {
-            statement.put("Effect", "Deny");
-            response.put("tenantId", tenantIdAsString);
-        }
-
-        statement.put("Resource", resource);
-        policyDocument.put("Statement", Arrays.asList(statement));
-
-        response.put("policyDocument", policyDocument);
-
-        Map<String, String> context = new HashMap<>();
-        context.put("now", new Date().toString());
-        response.put("context", context);
-
-        return response;
-    }
-}*/
